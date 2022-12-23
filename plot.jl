@@ -25,15 +25,15 @@ Ploting by date
 =#
 
 # for (car, boxH) in p.height
-# 	for (date, data) in p.data[car]
-# 		converse(data[1], data[2], data[3], boxH)
-# 		draw(data[1], data[2], car, date)
-# 		# push!(cars, car)
-# 		# push!(dates, date)
-# 		# push!(sticks, data[1][2] - data[1][1])
-# 		# push!(sonics, data[2][2] - data[2][1])
-# 		# push!(gape, data[1][2] - data[1][1] - data[2][2] + data[2][1])
-# 	end
+#     for (date, data) in p.data[car]
+#         converse(data[1], data[2], data[3], boxH)
+#         draw(data[1], data[2], car, date)
+#         # push!(cars, car)
+#         # push!(dates, date)
+#         # push!(sticks, data[1][2] - data[1][1])
+#         # push!(sonics, data[2][2] - data[2][1])
+#         # push!(gape, data[1][2] - data[1][1] - data[2][2] + data[2][1])
+#     end
 # end
 
 #=
@@ -46,19 +46,20 @@ Ploting by car
 =#
 
 for (car, boxH) in p.height
-	stick::Vector{Vector{Float64}} = []
-	sonic::Vector{Vector{Float64}} = []
-	dates::Vector{String} = []
+    stick::Vector{Vector{Float64}} = []
+    sonic::Vector{Vector{Float64}} = []
+    dates::Vector{String} = []
 
-	for (date, data) in p.data[car]
-		converse(data[1], data[2], data[3], boxH)
-		push!(stick, data[1])
-		push!(sonic, data[2])
-		push!(dates, date)
-	end
+    for (date, data) in p.data[car]
+        converse(data[1], data[2], data[3], boxH)
+        push!(stick, data[1])
+        push!(sonic, data[2])
+        push!(dates, date)
+    end
 
-	drawByCar(stick, car, dates, "1")
-	drawByCar(sonic, car, dates, "2")
+    dateM::Matrix{String} = reshape(dates, (1, length(p.data[car])))
+    drawByCar(stick, car, dateM, "_stick")
+    drawByCar(sonic, car, dateM, "_sonic")
 
 end
 
