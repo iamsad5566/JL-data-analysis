@@ -1,5 +1,3 @@
-using Plots
-
 include("formula.jl")
 include("parameters.jl")
 include("dataProcess.jl")
