@@ -8,6 +8,7 @@ function draw(stick::Vector{Float64}, sonic::Vector{Float64}, car::String, date:
 	savefig("./" * car * "_" * date * ".png")
 end
 
+
 function writeData(columnCar::Vector{String}, columnDate::Vector{String}, columnStickSlope::Vector{Float64}, columnSonicSlope::Vector{Float64}, columnGape::Vector{Float64})
 	df = DataFrame(Car = columnCar, Date = columnDate, Stick = columnStickSlope, Sonic = columnSonicSlope, Gape = columnGape)
 	CSV.write("./slope.csv", df)
