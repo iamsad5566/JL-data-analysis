@@ -12,7 +12,7 @@ include("dataProcess.jl")
 # 51C-50477 -2.5
 
 const y1denominator::Float64 = 4095
-const x = ["Before", "After"]
+const X = ["Before", "After"]
 p = Parameters()
 
 #=
@@ -22,20 +22,40 @@ Ploting by car and date for x axis
 
 for (car, boxH) in p.height
 	xAxis::Vector{String} = []
-	stickSlope::Vector{Float64} = []
-	sonicSlope::Vector{Float64} = []
+	# stickSlope::Vector{Float64} = []
+	# sonicSlope::Vector{Float64} = []
+	slopes::Vector{Float64} = []
 
 	for (date, data) in p.data[car]
 		push!(xAxis, date)
 		converse(data[1], data[2], data[3], boxH)
-		push!(stickSlope, data[1][2] - data[1][1])
-		push!(sonicSlope, data[2][2] - data[2][1])
+		# push!(stickSlope, data[1][2] - data[1][1])
+		# push!(sonicSlope, data[2][2] - data[2][1])
+
 	end
 
-	plot(xAxis, xlabel = "Dates", [stickSlope sonicSlope], ylabel = "percentage change", ylims = (0, 1.0), yticks = 0:0.05:1, grid = true, title = car, color = [:red :green], linewidth = 3, label = ["stick" "sonic"])
-	plot!(lengend = :outerbottom, legendcolumns = 2)
-	savefig("line_chart/" * car * ".png")
+	bar(xAxis, [stickSlope, sonicSlope])
+	# plot(xlabel = "Dates", ylabel = "percentage change", ylims = (0, 1.0), yticks = 0:0.05:1, grid = true, title = car, widen = false)
+	# bar!(xAxis, stickSlope, bar_width = 0.4, label = "stick")
+	# bar!(sonicSlope, bar_width = 0.4, label = "sonic")
+	# plot!(lengend = :outerbottom, legendcolumns = 2)
+	savefig("line_chart/" * car * "_bar.png")
 end
+
+d1, d2, d3, d4 = [1, 3, 4, 3, 2], [2], [3], [5, 3]
+
+dlist = [d1, d2, d3, d4]
+ni = length.(dlist)
+dc = distinguishable_colors(maximum(ni), [RGB(0, 0, 0), RGB(1, 1, 1)], dropseed = true)
+plot(xlabel = "Series", ylabel = "Values", widen = false)
+k = 1
+for (n, d) in zip(ni, dlist)
+	bar!(k:k+n-1, d, bar_width = 1, c = dc[1:n])
+	global k += n + 1
+end
+xticks!(cumsum(ni .+ 1) .- (ni .+ 1), ["d1", "d2", "d3", "d4"])
+println(cumsum(ni .+ 1) .- (ni .+ 1) / 2)
+println(ni)
 
 
 #=
@@ -101,18 +121,18 @@ Ploting by car
 Adjust
 =#
 
-testCar = "51C-50477"
-boxH::Float64 = p.height[testCar]
+# testCar = "51C-50477"
+# boxH::Float64 = p.height[testCar]
 
-boxH -= 2.5
+# boxH -= 2.5
 
-dt = p.data[testCar]
+# dt = p.data[testCar]
 
 
-for (date, data) in dt
-	converse(data[1], data[2], data[3], boxH)
-	plot(x, [data[1] data[2]], title = testCar * "_" * date * "_adjust", linewidth = 3, label = ["stick" "sonic"])
-	plot!(legend = :outerbottom, legendcolumns = 2)
-	savefig("adjust/" * testCar * "_" * date * "_adjust.png")
-end
+# for (date, data) in dt
+# 	converse(data[1], data[2], data[3], boxH)
+# 	plot(x, [data[1] data[2]], title = testCar * "_" * date * "_adjust", linewidth = 3, label = ["stick" "sonic"])
+# 	plot!(legend = :outerbottom, legendcolumns = 2)
+# 	savefig("adjust/" * testCar * "_" * date * "_adjust.png")
+# end
 
