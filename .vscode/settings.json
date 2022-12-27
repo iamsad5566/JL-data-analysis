@@ -1,5 +1,5 @@
 {
-    "editor.defaultFormatter": "0h7z.vscode-julia-format",
+    "editor.defaultFormatter": "julialang.language-julia",
     "workbench.colorTheme": "Darcula",
     "window.autoDetectColorScheme": false,
     "editor.formatOnSave": true

@@ -21,42 +21,49 @@ Ploting by car and date for x axis
 =#
 
 for (car, boxH) in p.height
-	xAxis::Vector{String} = []
-	# stickSlope::Vector{Float64} = []
-	# sonicSlope::Vector{Float64} = []
-	slopes::Vector{Float64} = []
+    xAxis::Vector{String} = []
+    # stickSlope::Vector{Float64} = []
+    # sonicSlope::Vector{Float64} = []
+    slopes::Vector{Vector{Float64}} = []
 
-	for (date, data) in p.data[car]
-		push!(xAxis, date)
-		converse(data[1], data[2], data[3], boxH)
-		# push!(stickSlope, data[1][2] - data[1][1])
-		# push!(sonicSlope, data[2][2] - data[2][1])
+    for (date, data) in p.data[car]
+        push!(xAxis, date)
+        converse(data[1], data[2], data[3], boxH)
+        push!(slopes, [data[1][2] - data[1][1], data[2][2] - data[2][1]])
+        # push!(stickSlope, data[1][2] - data[1][1])
+        # push!(sonicSlope, data[2][2] - data[2][1])
 
-	end
+    end
 
-	bar(xAxis, [stickSlope, sonicSlope])
-	# plot(xlabel = "Dates", ylabel = "percentage change", ylims = (0, 1.0), yticks = 0:0.05:1, grid = true, title = car, widen = false)
-	# bar!(xAxis, stickSlope, bar_width = 0.4, label = "stick")
-	# bar!(sonicSlope, bar_width = 0.4, label = "sonic")
-	# plot!(lengend = :outerbottom, legendcolumns = 2)
-	savefig("line_chart/" * car * "_bar.png")
+    ni = length.(slopes)
+    color = distinguishable_colors(maximum(ni), [RGB(0, 0, 0), RGB(1, 1, 1)], dropseed=true)
+    plot(xlabel="Date", ylabel="Slope", winden=true, ylims=(0, 1.0), yticks=0:0.05:1, grid=true, title=car, legend=false)
+    k = 1
+    for (n, sl) in zip(ni, slopes)
+        bar!(k:k+n-1, sl, bar_width=1, color=[:red, :blue])
+        k += n + 1
+    end
+    xticks!(cumsum(ni .+ 1) .- (ni .+ 1) / 2, xAxis)
+    savefig("line_chart/" * car * "_bar.png")
+    # bar(xAxis, [stickSlope, sonicSlope])
+    # plot(xlabel="Dates", ylabel="percentage change", ylims=(0, 1.0), yticks=0:0.05:1, grid=true, title=car, widen=false)
+    # bar!(xAxis, stickSlope, bar_width=0.4, label="stick")
+    # bar!(sonicSlope, bar_width=0.4, label="sonic")
+    # savefig("line_chart/" * car * "_bar.png")
 end
 
-d1, d2, d3, d4 = [1, 3, 4, 3, 2], [2], [3], [5, 3]
+# d1, d2, d3, d4 = [1, 3, 4, 3, 2], [2], [3], [5, 3]
 
-dlist = [d1, d2, d3, d4]
-ni = length.(dlist)
-dc = distinguishable_colors(maximum(ni), [RGB(0, 0, 0), RGB(1, 1, 1)], dropseed = true)
-plot(xlabel = "Series", ylabel = "Values", widen = false)
-k = 1
-for (n, d) in zip(ni, dlist)
-	bar!(k:k+n-1, d, bar_width = 1, c = dc[1:n])
-	global k += n + 1
-end
-xticks!(cumsum(ni .+ 1) .- (ni .+ 1), ["d1", "d2", "d3", "d4"])
-println(cumsum(ni .+ 1) .- (ni .+ 1) / 2)
-println(ni)
-
+# dlist = [d1, d2, d3, d4]
+# ni = length.(dlist)
+# dc = distinguishable_colors(maximum(ni), [RGB(0, 0, 0), RGB(1, 1, 1)], dropseed=true)
+# plot(xlabel="Series", ylabel="Values", widen=false)
+# k = 1
+# for (n, d) in zip(ni, dlist)
+#     bar!(k:k+n-1, d, bar_width=1, c=dc[1:n])
+#     global k += n + 1
+# end
+# xticks!(cumsum(ni .+ 1) .- (ni .+ 1) / 2, ["d1", "d2", "d3", "d4"])
 
 #=
 ========================================================
